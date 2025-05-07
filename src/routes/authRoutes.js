@@ -2,16 +2,17 @@ import express from "express";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
+
 const router = express.Router();
 
 const generateToken = (userId) => {
-    return jwt.sign({userId}, process.env.JWT_SECRET, { expiresIn: "15d"});
-}
+    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "15d"});
+};
 
 
 router.post("/register", async (req, res) => {
 try {
-    const {email,username,password} = req.body
+    const { email, username, password } = req.body
 
     if(!username || !email || !password) {
         return res.status(400).json({ message: "All fields are required"});
@@ -35,6 +36,7 @@ try {
     if (existingUsername) {
         return res.status(400).json({ message: "Username already exists!"});
     }
+
 
     // get random avatar
     const profileImage = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
@@ -61,7 +63,7 @@ try {
     });
 
 } catch (error) {
-    console.log("Error in register route", error);
+    console.log("Error in register route", error.message);
     res.status(500).json({ message: "Interval server error"});
     }
 });
